@@ -6,9 +6,17 @@ socket.on('message', (message) => {
 
 // We send message from client to server
 document.getElementById('message-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+
     let message = e.target.elements.message.value;
 
-    socket.emit('chat-message', message);
+    socket.emit('chat-message', message, (error) => {
+        if (error) {
+            return console.log(error);
+        }
+
+        console.log('Message delivered!');
+    });
 });
 
 // We cant share our current location if we want it
@@ -25,6 +33,8 @@ document.getElementById('send-location').addEventListener('click', (e) => {
             longitude: coords.longitude,
         };
 
-        socket.emit('current-location', location);
+        socket.emit('current-location', location, () => {
+            console.log('Location shared...');
+        });
     });
 });

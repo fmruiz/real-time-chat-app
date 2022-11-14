@@ -2,6 +2,7 @@ const express = require('express');
 const http = require('http');
 const path = require('path');
 const socketio = require('socket.io');
+const Filter = require('bad-words');
 
 /**
  * Express initialization
@@ -39,16 +40,25 @@ io.on('connection', (socket) => {
     });
 
     // We receive chat message value from client
-    socket.on('chat-message', (message) => {
-        console.log(message);
+    socket.on('chat-message', (message, callback) => {
+        // Filter of profanity
+        const filter = new Filter();
+
+        if (filter.isProfane(message)) {
+            return callback('Profanity is not allowed!');
+        }
+
+        io.emit('message', message);
+        callback();
     });
 
     // We receive the current location of the user
-    socket.on('current-location', (location) => {
+    socket.on('current-location', (location, callback) => {
         io.emit(
             'message',
-            `Location: ${location.latitude}, ${location.longitude}`
+            `https://google.com/maps?q=${location.latitude},${location.longitude}`
         );
+        callback();
     });
 });
 
