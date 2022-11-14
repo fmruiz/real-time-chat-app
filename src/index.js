@@ -42,6 +42,14 @@ io.on('connection', (socket) => {
     socket.on('chat-message', (message) => {
         console.log(message);
     });
+
+    // We receive the current location of the user
+    socket.on('current-location', (location) => {
+        io.emit(
+            'message',
+            `Location: ${location.latitude}, ${location.longitude}`
+        );
+    });
 });
 
 /**

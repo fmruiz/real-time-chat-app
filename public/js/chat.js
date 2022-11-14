@@ -10,3 +10,21 @@ document.getElementById('message-form').addEventListener('submit', (e) => {
 
     socket.emit('chat-message', message);
 });
+
+// We cant share our current location if we want it
+document.getElementById('send-location').addEventListener('click', (e) => {
+    if (!navigator.geolocation) {
+        return alert('Geolocation is not supported by your browser');
+    }
+
+    navigator.geolocation.getCurrentPosition((position) => {
+        const { coords } = position;
+
+        const location = {
+            latitude: coords.latitude,
+            longitude: coords.longitude,
+        };
+
+        socket.emit('current-location', location);
+    });
+});
