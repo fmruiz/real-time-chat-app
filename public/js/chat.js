@@ -6,9 +6,18 @@ const socket = io();
 const $messageForm = document.getElementById('message-form');
 const $messageFormInput = $messageForm.querySelector('input');
 const $messageFormButton = $messageForm.querySelector('button');
+const $messages = document.getElementById('messages');
+
+/**
+ * Templates
+ */
+const messageTemplate = document.querySelector('#message-template').innerHTML;
 
 socket.on('message', (message) => {
     console.log(message);
+
+    const html = Mustache.render(messageTemplate, { message });
+    $messages.insertAdjacentHTML('beforeend', html);
 });
 
 /**
