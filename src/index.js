@@ -53,7 +53,7 @@ io.on('connection', (socket) => {
     // We receive the current location of the user
     socket.on('current-location', (location, callback) => {
         io.emit(
-            'message',
+            'locationMessage',
             `https://google.com/maps?q=${location.latitude},${location.longitude}`
         );
         callback();
