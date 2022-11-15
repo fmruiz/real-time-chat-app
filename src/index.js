@@ -35,9 +35,7 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('message', 'A new user has joined!');
 
     // We send a notification to connected users if a one client left the chat
-    socket.on('disconnect', () => {
-        io.emit('message', 'A user has left!');
-    });
+    socket.on('disconnect', () => io.emit('message', 'A user has left!'));
 
     // We receive chat message value from client
     socket.on('chat-message', (message, callback) => {
