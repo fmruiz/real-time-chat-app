@@ -10,6 +10,11 @@ const Filter = require('bad-words');
 const { generateMessage } = require('./utils/messages');
 
 /**
+ * Constants
+ */
+const OPERATIONS = require('./constants');
+
+/**
  * Express initialization
  */
 const app = express();
@@ -34,14 +39,23 @@ io.on('connection', (socket) => {
     console.log('Websocket connection success');
 
     // Welcome notification to users
-    socket.emit('message', generateMessage('Welcome to free chat!'));
+    socket.emit(
+        'message',
+        generateMessage(OPERATIONS.messages, 'Welcome to free chat!')
+    );
 
     // We send a notification to connected users if a new client is connected
-    socket.broadcast.emit('message', generateMessage('A new user has joined!'));
+    socket.broadcast.emit(
+        'message',
+        generateMessage(OPERATIONS.messages, 'A new user has joined!')
+    );
 
     // We send a notification to connected users if a one client left the chat
     socket.on('disconnect', () =>
-        io.emit('message', generateMessage('A user has left!'))
+        io.emit(
+            'message',
+            generateMessage(OPERATIONS.messages, 'A user has left!')
+        )
     );
 
     // We receive chat message value from client
@@ -53,7 +67,7 @@ io.on('connection', (socket) => {
             return callback('Profanity is not allowed!');
         }
 
-        io.emit('message', generateMessage(message));
+        io.emit('message', generateMessage(OPERATIONS.messages, message));
         callback();
     });
 
@@ -61,7 +75,10 @@ io.on('connection', (socket) => {
     socket.on('current-location', (location, callback) => {
         io.emit(
             'locationMessage',
-            `https://google.com/maps?q=${location.latitude},${location.longitude}`
+            generateMessage(
+                OPERATIONS.location,
+                `https://google.com/maps?q=${location.latitude},${location.longitude}`
+            )
         );
         callback();
     });

@@ -29,7 +29,10 @@
 
         <!-- Location template -->
         <script id="location-template" type="text/html">
-            <a href="{{message}}" target="_blank">My current location</a>
+            <p>
+                {{time}} -
+                <a href="{{message}}" target="_blank">My current location</a>
+            </p>
         </script>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>
